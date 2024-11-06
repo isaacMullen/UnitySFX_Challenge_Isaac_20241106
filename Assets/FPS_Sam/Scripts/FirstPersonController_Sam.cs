@@ -18,11 +18,8 @@ public class FirstPersonController_Sam : MonoBehaviour
     List<AudioSource> currentStation = new List<AudioSource>();
     
     List<AudioSource>[] stations = new List<AudioSource>[3];
-    
-
-   
+       
     int songToPlay = 0;
-
 
     public bool canMove { get; private set; } = true;
     private bool isRunning => canRun && Input.GetKey(runKey);
