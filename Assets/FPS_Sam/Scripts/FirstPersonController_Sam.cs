@@ -8,13 +8,15 @@ using UnityEngine;
 
 public class FirstPersonController_Sam : MonoBehaviour
 {
-    //public AudioSource threeDimSound;
+    //Red Button Sound Effect
     public AudioSource twoDimSound;
 
+    //Each station is a List<AudioSource>
     public List<AudioSource> mississipiSongs = new List<AudioSource>();
     public List<AudioSource> RNBsongs = new List<AudioSource>();
     public List<AudioSource> SYNTHsongs = new List<AudioSource>();
 
+    //Current station List to compare to 
     List<AudioSource> currentStation = new List<AudioSource>();
     
     List<AudioSource>[] stations = new List<AudioSource>[3];
@@ -136,10 +138,12 @@ public class FirstPersonController_Sam : MonoBehaviour
 
     private void Awake()
     {                
+        //Populating the array with each station
         stations[0] = mississipiSongs;
         stations[1] = RNBsongs;
         stations[2] = SYNTHsongs;
 
+        //Starting station will be Mississipi station
         currentStation = stations[0];
 
         mississipiSongs[songToPlay].Play();
@@ -160,6 +164,7 @@ public class FirstPersonController_Sam : MonoBehaviour
     private void Update()
     {
 
+        //Changing station and handling starting/stopping with Key Presses, (1, 2, 3)
         if (Input.GetKeyDown(KeyCode.Alpha1))
         {
             currentStation[songToPlay].Stop();
@@ -195,6 +200,7 @@ public class FirstPersonController_Sam : MonoBehaviour
             currentStation[songToPlay].loop = true;
         }
 
+        //Looping through the current station to the next song
         if (Input.GetKeyDown(KeyCode.F))
         {
             Debug.Log($"Station: {currentStation} Song Number: {songToPlay} Station Length: {currentStation.Count}");
@@ -207,6 +213,7 @@ public class FirstPersonController_Sam : MonoBehaviour
                 currentStation[songToPlay].Play();
                 currentStation[songToPlay].loop = true;
             }
+            //If next song is out of range of the list. Loop to the first
             else
             {
                 currentStation[songToPlay].Stop();
