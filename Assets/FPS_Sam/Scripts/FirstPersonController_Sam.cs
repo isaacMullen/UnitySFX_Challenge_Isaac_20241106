@@ -1,5 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Xml.Schema;
+using System.Xml.Serialization;
+using TMPro;
 using UnityEngine;
 
 // Sam Robichaud 2022
@@ -8,6 +11,9 @@ using UnityEngine;
 
 public class FirstPersonController_Sam : MonoBehaviour
 {
+    //Station and Song Text
+    public TextMeshProUGUI stationAndSongText;
+    
     //Red Button Sound Effect
     public AudioSource twoDimSound;
 
@@ -18,9 +24,12 @@ public class FirstPersonController_Sam : MonoBehaviour
 
     //Current station List to compare to 
     List<AudioSource> currentStation = new List<AudioSource>();
+    string stationName;
     
+    //Array to hold each station (list of songs)
     List<AudioSource>[] stations = new List<AudioSource>[3];
        
+    //Index for the current song
     int songToPlay = 0;
 
     public bool canMove { get; private set; } = true;
@@ -159,14 +168,46 @@ public class FirstPersonController_Sam : MonoBehaviour
         Cursor.visible = false;
     }
 
-   
+    private void Start()
+    {
+        //Loading each song into memory. (eliminates slight freeze when first switching to a new song at runtime)
+        foreach(var station in stations)
+        {
+            foreach(var song in station)
+            {
+                song.clip.LoadAudioData();
+            }
+        }
+    }
+
+
 
     private void Update()
     {
+        if(Input.GetKeyDown(KeyCode.Escape))
+        {
+            Application.Quit();
+        }
+        
+        //Setting Station Names based on List in Array
+        if(currentStation == stations[0])
+        {
+            stationName = "Country";
+        }
+        else if (currentStation == stations[1])
+        {
+            stationName = "RNB";
+        }
+        else 
+        {
+            stationName = "SYNTH";
+        }
 
+        stationAndSongText.text = $"Station: {stationName}\nSong: {currentStation[songToPlay].name}";
+        
         //Changing station and handling starting/stopping with Key Presses, (1, 2, 3)
         if (Input.GetKeyDown(KeyCode.Alpha1))
-        {
+        {           
             currentStation[songToPlay].Stop();
 
             songToPlay = 0;
@@ -178,7 +219,7 @@ public class FirstPersonController_Sam : MonoBehaviour
 
         }
         if (Input.GetKeyDown(KeyCode.Alpha2))
-        {
+        {            
             currentStation[songToPlay].Stop();
 
             songToPlay = 0;
